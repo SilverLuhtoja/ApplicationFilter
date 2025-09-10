@@ -1,0 +1,20 @@
+
+.red-button {
+  @apply text-white bg-red-500 hover:bg-red-600;
+}
+
+.green-button {
+  @apply text-white bg-green-500 hover:bg-green-600;
+}
+
+.violet-button {
+  @apply text-white bg-violet-700 hover:bg-violet-900;
+}
+
+.btn {
+  @apply mx-2 px-3 py-1 text-sm rounded;
+}
+
+.large-btn {
+  @apply px-4 py-2 m-6 rounded;
+}

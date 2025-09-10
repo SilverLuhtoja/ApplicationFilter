@@ -1,0 +1,10 @@
+{
+  "name": "My filter",
+  "filterList": [
+    {
+      "criteria": "title",
+      "operator": "starts_with",
+      "value": "Begin"
+    }
+  ]
+}

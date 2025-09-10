@@ -1,0 +1,57 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "${spring_boot_version}"
+	id 'io.spring.dependency-management' version "${spring_dependency_management_version}"
+}
+
+group = 'com.askend'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot Web Starter
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation group: 'jakarta.validation', name: 'jakarta.validation-api'
+	implementation group: 'org.springframework', name: 'spring-jdbc', version: '6.2.3'
+	implementation group: 'jakarta.ws.rs', name: 'jakarta.ws.rs-api'
+	// annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
+
+	// Database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation group: 'org.postgresql', name: 'postgresql'
+	// implementation group: 'org.flyway', name: 'flyway-core'
+
+	// MapStruct
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: map_struct_version
+    annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: map_struct_version
+
+	// Lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: lombok_mapstruct_binding_version
+
+	// Flyway
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.3'
+
+
+	// Spring Boot Testing Dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+bootJar {
+	archiveFileName = 'filter-api.jar'
+}

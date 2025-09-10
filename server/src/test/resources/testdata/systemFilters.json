@@ -1,0 +1,20 @@
+{
+  "systemFilters": {
+    "DATE": [
+      "BEFORE",
+      "AFTER",
+      "EQUALS"
+    ],
+    "AMOUNT": [
+      "GREATER_THAN",
+      "LESS_THAN",
+      "EQUAL_TO"
+    ],
+    "TITLE": [
+      "EQUALS",
+      "CONTAINS",
+      "STARTS_WITH",
+      "ENDS_WITH"
+    ]
+  }
+}

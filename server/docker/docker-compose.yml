@@ -1,0 +1,40 @@
+services:
+  filter-db:
+    container_name: filter-db
+    image: postgres:13.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "15432:5432"
+    networks:
+      - app-network
+
+  filter-test-db:
+    container_name: filter-test-db
+    image: postgres:13.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "25432:5432"
+    networks:
+      - app-network
+
+  filter-api:
+    container_name: api
+    build: ..
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://filter-db:5432/postgres
+      SERVER_PORT: 8000
+    depends_on:
+      - filter-db
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+networks:
+  app-network:

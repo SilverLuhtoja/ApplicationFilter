@@ -1,0 +1,67 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 25432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+        working-directory: server
+      - name: Build with Gradle
+        run: ./gradlew build
+        working-directory: server
+
+          # Build and test the frontend
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.12.x'
+      - name: Install dependencies and build frontend
+        run: |
+          npm install
+          npm run build
+        working-directory: client
+
+      # Start the frontend dev server and verify it starts successfully
+      - name: Start and test frontend
+        working-directory: client
+        run: |
+          nohup npm run dev &   # run the dev server in the background
+          # Poll for up to 60 seconds until the frontend responds on port 5173
+          for i in {1..30}; do
+            if curl -s http://localhost:5173 > /dev/null; then
+              echo "Frontend started successfully."
+              exit 0
+            fi
+            echo "Waiting for frontend to start..."
+            sleep 2
+          done
+          echo "Frontend failed to start in time."
+          exit 1

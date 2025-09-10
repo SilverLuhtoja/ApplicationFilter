@@ -1,0 +1,25 @@
+server:
+  port: ${SERVER_PORT:8000}
+
+spring:
+  application:
+    name: filter-api
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:15432/postgres}
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    schemas: filter
+    locations: db/migration
+    clean-disabled: true
+    baseline-on-migrate: true
