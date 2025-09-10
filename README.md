@@ -25,7 +25,7 @@ Frontend:
 
 ## Usage:
 
-Quick Start: Open a terminal in the project's root directory and run `./start.sh`
+Quick Start: Open a terminal in the project's root directory and run `./start.sh` (LF Line Seguence required to work)
 Command will create necessary containers for application to run.
 
 ## API ENDPOINTS:
