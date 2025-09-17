@@ -1,13 +1,33 @@
 services:
   filter-db:
-    container_name: filter-db
     image: postgres:13.3-alpine
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - "15432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h 127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - app-network
+
+  filter-api:
+    build: ..
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://filter-db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_PORT: 8000
+    depends_on:
+      filter-db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
     networks:
       - app-network
 
@@ -20,19 +40,6 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "25432:5432"
-    networks:
-      - app-network
-
-  filter-api:
-    container_name: api
-    build: ..
-    environment:
-      DATASOURCE_URL: jdbc:postgresql://filter-db:5432/postgres
-      SERVER_PORT: 8000
-    depends_on:
-      - filter-db
-    ports:
-      - "8000:8000"
     networks:
       - app-network
 
